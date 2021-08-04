@@ -1,0 +1,33 @@
+name: Build Wallet 2.0 for Android
+
+on:
+  push:
+    branches:
+      - master
+      - staging
+    tags:
+      - '*'
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  BuildAndroidApp:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: FranzDiebold/github-env-vars-action@v2
+      - name: Set Environment Variables
+        shell: bash
+        run: |
+          if [[ "$CI_REF" == *"heads/staging/"* ]]; then SUFFIX=beta
+          elif [[ "$CI_REF" == *"heads/master/"* ]]; then SUFFIX=rc
+          elif [[ "$CI_REF" == *"refs/tags/"* ]]; then SUFFIX=$CI_REF_NAME
+          else SUFFIX=dev; fi
+          [[ "$CI_REF" != *"refs/tags/"* ]] && SUFFIX+=.$CI_SHA_SHORT
+          echo "$CI_REF"
+          echo SUFFIX
