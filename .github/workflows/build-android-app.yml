@@ -16,10 +16,10 @@ jobs:
       - name: Set Environment Variables
         shell: bash
         run: |
-          if [[ "$CI_REF" == "heads/staging" ]]; then SUFFIX=beta
-          elif [[ "$CI_REF" == *"heads/main/"* ]]; then SUFFIX=rc
-          elif [[ "$CI_REF" == *"refs/tags/"* ]]; then SUFFIX=$CI_REF_NAME
+          if [[ "$CI_REF" == "refs/heads/staging" ]]; then SUFFIX=beta
+          elif [[ "$CI_REF" == "refs/heads/main" ]]; then SUFFIX=rc
+          elif [[ "$CI_REF" == *"refs/tags"* ]]; then SUFFIX=$CI_REF_NAME
           else SUFFIX=dev; fi
-          [[ "$CI_REF" != *"refs/tags/"* ]] && SUFFIX+=.$CI_SHA_SHORT
+          [[ "$CI_REF" != *"refs/tags"* ]] && SUFFIX+=.$CI_SHA_SHORT
           echo "$CI_REF"
           echo "$SUFFIX"
