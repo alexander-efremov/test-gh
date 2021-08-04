@@ -3,15 +3,7 @@ name: Build Wallet 2.0 for Android
 on:
   push:
     branches:
-      - master
-      - staging
-    tags:
       - '*'
-    paths-ignore:
-      - '**.md'
-  pull_request:
-    paths-ignore:
-      - '**.md'
 
 jobs:
   BuildAndroidApp:
