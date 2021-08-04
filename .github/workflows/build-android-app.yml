@@ -22,4 +22,4 @@ jobs:
           else SUFFIX=dev; fi
           [[ "$CI_REF" != *"refs/tags/"* ]] && SUFFIX+=.$CI_SHA_SHORT
           echo "$CI_REF"
-          echo "$CI_REF"
+          echo "$SUFFIX"
