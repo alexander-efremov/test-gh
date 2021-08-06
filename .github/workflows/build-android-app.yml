@@ -19,7 +19,7 @@ jobs:
         run: |
           SHA=$(printf '${{ github.sha }}' | cut -c 1-8)
           CI_REF=${{ github.ref }}
-          IS_RELEASE_BUILD=$(if [ $(cut -d'/' -f2 <<<$CI_REF) = "tags" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a release (tagged) build.
+          IS_RELEASE_BUILD=$(if [ $(cut -d'/' -f2 <<<$CI_REF) = "tags" && $CI_REF = "refs/heads/master" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a release (tagged on master branch) build.
           IS_BETA_BUILD=$(if [ $CI_REF = "refs/heads/staging" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a beta (staging branch) build.
           IS_RC_BUILD=$(if [ $CI_REF = "refs/heads/master" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a RC (master branch) build.
           IS_DEV_BUILD=$(if $IS_RELEASE_BUILD != "true" && $IS_BETA_BUILD != "true" && $IS_RC_BUILD != "true"; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a dev (feature/* branch) build.
