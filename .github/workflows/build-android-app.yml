@@ -30,3 +30,7 @@ jobs:
           [ $IS_RELEASE_BUILD != "true" ] && SUFFIX+=.$SHA
           echo $CI_REF
           echo "$SUFFIX"
+          echo "$IS_RELEASE_BUILD"
+          echo "$IS_BETA_BUILD"
+          echo "$IS_RC_BUILD"
+          echo "$IS_RETAIL_BUILD"
