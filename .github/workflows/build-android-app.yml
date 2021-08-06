@@ -5,7 +5,7 @@ on:
     branches:
       - '*'
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   BuildAndroidApp:
@@ -22,7 +22,6 @@ jobs:
           IS_RELEASE_BUILD=$(if [ $(cut -d'/' -f2 <<<$CI_REF) = "tags" ] && [ $CI_REF = "refs/heads/master" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a release (tagged on master branch) build.
           IS_BETA_BUILD=$(if [ $CI_REF = "refs/heads/staging" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a beta (staging branch) build.
           IS_RC_BUILD=$(if [ $CI_REF = "refs/heads/master" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a RC (master branch) build.
-          IS_DEV_BUILD=$(if $IS_RELEASE_BUILD != "true" && $IS_BETA_BUILD != "true" && $IS_RC_BUILD != "true"; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a dev (feature/* branch) build.
           IS_RETAIL_BUILD=$(if [ $IS_RELEASE_BUILD = "true" ] || [ $IS_RC_BUILD = "true" ] || [ $IS_BETA_BUILD = "true" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a non-development build.
           if $IS_BETA_BUILD; then SUFFIX=beta
           elif $IS_RC_BUILD; then SUFFIX=rc
@@ -35,4 +34,3 @@ jobs:
           echo "IS_BETA_BUILD=$IS_BETA_BUILD"
           echo "IS_RC_BUILD=$IS_RC_BUILD"
           echo "IS_RETAIL_BUILD=$IS_RETAIL_BUILD"
-          echo "IS_DEV_BUILD=$IS_DEV_BUILD"
