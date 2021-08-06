@@ -20,7 +20,7 @@ jobs:
           SHA=$(printf '${{ github.sha }}' | cut -c 1-8)
           if [[ ${{ github.ref }} == "refs/heads/staging" ]]; then SUFFIX=beta
           elif [[ ${{ github.ref }} == "refs/heads/master" ]]; then SUFFIX=rc
-          elif [[ ${{ github.ref }} == *"refs/tags"* ]]; then SUFFIX=${{ github.event.ref }}
+          elif [[ ${{ github.ref }} == *"refs/tags"* ]]; then SUFFIX=${GITHUB_REF##*/}
           else SUFFIX=dev; fi
           [[ ${{ github.ref }} != *"refs/tags"* ]] && SUFFIX+=.$SHA
           echo ${{ github.ref }}
