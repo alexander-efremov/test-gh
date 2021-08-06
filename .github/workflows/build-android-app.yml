@@ -17,15 +17,16 @@ jobs:
       - name: Set Environment Variables
         shell: bash
         run: |
+          SHA=$(printf '${{ github.sha }}' | cut -c 1-8)
           CI_REF=${{ github.ref }}
           IS_RELEASE_BUILD=$(if [ $(cut -d'/' -f2 <<<$CI_REF) = "tags" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a release (tagged) build.
-          IS_BETA_BUILD=$(if [ $CI_REF = "refs/heads/staging" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a beta (staging branch) build. 
-          IS_RETAIL_BUILD=$(if [ $IS_RELEASE_BUILD = "true" ] || [ $CI_REF = "refs/heads/master" ] || [ $IS_BETA_BUILD = "true" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a non-development build.
-          SHA=$(printf '${{ github.sha }}' | cut -c 1-8)
-          if [ $CI_REF == "refs/heads/staging" ]; then SUFFIX=beta
-          elif [ $CI_REF == "refs/heads/master" ]; then SUFFIX=rc
-          elif [ $CI_REF == *"refs/tags/v"* ]; then SUFFIX=${GITHUB_REF##*/}
+          IS_BETA_BUILD=$(if [ $CI_REF = "refs/heads/staging" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a beta (staging branch) build.
+          IS_RC_BUILD=$(if [ $CI_REF = "refs/heads/master" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a RC (master branch) build.
+          IS_RETAIL_BUILD=$(if [ $IS_RELEASE_BUILD = "true" ] || [ $IS_RC_BUILD = "true" ] || [ $IS_BETA_BUILD = "true" ]; then printf 'true'; else printf 'false'; fi) # Determines if we're creating a non-development build.
+          if $IS_BETA_BUILD; then SUFFIX=beta
+          elif $IS_RC_BUILD; then SUFFIX=rc
+          elif $IS_RELEASE_BUILD; then SUFFIX=${GITHUB_REF##*/}
           else SUFFIX=dev; fi
-          [ $CI_REF != *"refs/tags"* ] && SUFFIX+=.$SHA
+          [ $IS_RELEASE_BUILD != "true" ] && SUFFIX+=.$SHA
           echo $CI_REF
           echo "$SUFFIX"
