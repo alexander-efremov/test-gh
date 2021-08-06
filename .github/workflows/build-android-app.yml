@@ -14,14 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: FranzDiebold/github-env-vars-action@v2
       - name: Set Environment Variables
         shell: bash
         run: |
-          if [[ "$CI_REF" == "refs/heads/staging" ]]; then SUFFIX=beta
-          elif [[ "$CI_REF" == "refs/heads/master" ]]; then SUFFIX=rc
-          elif [[ "$CI_REF" == *"refs/tags"* ]]; then SUFFIX=$CI_REF_NAME
+          if [[ ${{ github.ref }} == "refs/heads/staging" ]]; then SUFFIX=beta
+          elif [[ ${{ github.ref }} == "refs/heads/master" ]]; then SUFFIX=rc
+          elif [[ ${{ github.ref }} == *"refs/tags"* ]]; then SUFFIX=$CI_REF_NAME
           else SUFFIX=dev; fi
-          [[ "$CI_REF" != *"refs/tags"* ]] && SUFFIX+=.$CI_SHA_SHORT
-          echo "$CI_REF"
+          [[ ${{ github.ref }} != *"refs/tags"* ]] && SUFFIX+=.$CI_SHA_SHORT
+          echo ${{ github.ref }}
           echo "$SUFFIX"
