@@ -17,11 +17,11 @@ jobs:
       - name: Set Environment Variables
         shell: bash
         run: |
-          CI_SHA_SHORT=$(printf '${{ github.sha }}' | cut -c 1-8)
+          SHA=$(printf '${{ github.sha }}' | cut -c 1-8)
           if [[ ${{ github.ref }} == "refs/heads/staging" ]]; then SUFFIX=beta
           elif [[ ${{ github.ref }} == "refs/heads/master" ]]; then SUFFIX=rc
-          elif [[ ${{ github.ref }} == *"refs/tags"* ]]; then SUFFIX=$CI_REF_NAME
+          elif [[ ${{ github.ref }} == *"refs/tags"* ]]; then SUFFIX=${{ github.event.ref }}
           else SUFFIX=dev; fi
-          [[ ${{ github.ref }} != *"refs/tags"* ]] && SUFFIX+=.$CI_SHA_SHORT
+          [[ ${{ github.ref }} != *"refs/tags"* ]] && SUFFIX+=.$SHA
           echo ${{ github.ref }}
           echo "$SUFFIX"
