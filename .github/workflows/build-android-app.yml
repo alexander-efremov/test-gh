@@ -17,6 +17,7 @@ jobs:
       - name: Set Environment Variables
         shell: bash
         run: |
+          CI_SHA_SHORT = $(printf '${{ github.sha }}' | cut -c 1-8)
           if [[ ${{ github.ref }} == "refs/heads/staging" ]]; then SUFFIX=beta
           elif [[ ${{ github.ref }} == "refs/heads/master" ]]; then SUFFIX=rc
           elif [[ ${{ github.ref }} == *"refs/tags"* ]]; then SUFFIX=$CI_REF_NAME
